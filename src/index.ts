@@ -4,6 +4,7 @@ import { heapSort } from "./sortAlrorithms/heapSort";
 import { insertionSort } from "./sortAlrorithms/insertionSort";
 import { mergeSort } from "./sortAlrorithms/mergeSort";
 import { quickSort } from "./sortAlrorithms/quickSort";
+import { selectionSort } from "./sortAlrorithms/selectionSort";
 
 type OrdenationFn = (numbers: Array<number>) => Array<number>
 
@@ -11,7 +12,7 @@ const ordenationFunctions = [
     {
         name: 'InsertionSort',
         sortFn: insertionSort,
-        implemented: true,
+        implemented: false,
     },
     {
         name: 'HeapSort',
@@ -25,8 +26,8 @@ const ordenationFunctions = [
     },
     {
         name: 'SelectioSort',
-        sortFn: insertionSort,
-        implemented: false,
+        sortFn: selectionSort,
+        implemented: true,
     },
     {
         name: 'MergeSort',
