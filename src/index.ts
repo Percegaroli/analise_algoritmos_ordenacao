@@ -1,0 +1,64 @@
+import { differenceInMilliseconds } from "date-fns";
+import { SAMPLES } from "./generateSample";
+import { heapSort } from "./sortAlrorithms/heapSort";
+import { insertionSort } from "./sortAlrorithms/insertionSort";
+import { mergeSort } from "./sortAlrorithms/mergeSort";
+import { quickSort } from "./sortAlrorithms/quickSort";
+
+type OrdenationFn = (numbers: Array<number>) => Array<number>
+
+const ordenationFunctions = [
+    {
+        name: 'InsertionSort',
+        sortFn: insertionSort,
+        implemented: true,
+    },
+    {
+        name: 'HeapSort',
+        sortFn: heapSort,
+        implemented: false
+    },
+    {
+        name: 'QuickSort',
+        sortFn: quickSort,
+        implemented: false,
+    },
+    {
+        name: 'SelectioSort',
+        sortFn: insertionSort,
+        implemented: false,
+    },
+    {
+        name: 'MergeSort',
+        sortFn: mergeSort,
+        implemented: false
+    },
+]
+
+const getOrdenationTimeInMiliseconds = (numbers: Array<number>, ordenationFn: OrdenationFn) => {
+    const initialTime = new Date();
+    const orderedArray = ordenationFn([...numbers]);
+    const finalTime = new Date();
+    const correctSort = [...numbers].sort((a, b) => a - b);
+    if (!correctSort.every((number, index) => number === orderedArray[index])){
+        throw new Error('Ordenação incorreta');
+    }
+    return differenceInMilliseconds(finalTime, initialTime)
+}
+
+const resultsInsertionSort = SAMPLES.map(sampleGroup => ({
+    quantity: sampleGroup[0].length,
+    durations: sampleGroup.map(sample => getOrdenationTimeInMiliseconds(sample, insertionSort))
+}))
+
+const results = ordenationFunctions
+    .filter(({implemented}) => implemented)
+    .map(({ sortFn, name, }) => ({
+        name,
+        results: SAMPLES.map(sampleGroup => ({
+            quantity: sampleGroup[0].length,
+            durations: sampleGroup.map(sample => getOrdenationTimeInMiliseconds(sample, sortFn))
+        }))
+    }))
+
+console.log(results)    
