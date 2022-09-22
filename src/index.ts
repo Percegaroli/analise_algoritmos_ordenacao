@@ -5,6 +5,7 @@ import { insertionSort } from "./sortAlrorithms/insertionSort";
 import { mergeSort } from "./sortAlrorithms/mergeSort";
 import { quickSort } from "./sortAlrorithms/quickSort";
 import { selectionSort } from "./sortAlrorithms/selectionSort";
+import { calculateArrayMean } from "./utils/calculateArrayMean";
 
 type OrdenationFn = (numbers: Array<number>) => Array<number>
 
@@ -51,10 +52,14 @@ ordenationFunctions
     .filter(({implemented}) => implemented)
     .map(({ sortFn, name, }) => ({
         name,
-        results: SAMPLES.map(sampleGroup => ({
-            quantity: sampleGroup[0].length,
-            'durations(ms)': sampleGroup.map(sample => getOrdenationTimeInMiliseconds(sample, sortFn))
-        }))
+        results: SAMPLES.map(sampleGroup => {
+            const durations = sampleGroup.map(sample => getOrdenationTimeInMiliseconds(sample, sortFn))
+            return {
+                quantity: sampleGroup[0].length,
+                mean: calculateArrayMean(durations),
+                'durations(ms)': durations,
+            }}
+        )
     }))
     .forEach(({ name, results}) => {
         console.log(`Algoritmo: ${name}`);
