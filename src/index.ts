@@ -22,7 +22,7 @@ const ordenationFunctions = [
     {
         name: 'QuickSort',
         sortFn: quickSort,
-        implemented: false,
+        implemented: true,
     },
     {
         name: 'SelectioSort',
@@ -32,7 +32,7 @@ const ordenationFunctions = [
     {
         name: 'MergeSort',
         sortFn: mergeSort,
-        implemented: true
+        implemented: false
     },
 ]
 
