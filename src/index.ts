@@ -27,12 +27,12 @@ const ordenationFunctions = [
     {
         name: 'SelectioSort',
         sortFn: selectionSort,
-        implemented: true,
+        implemented: false,
     },
     {
         name: 'MergeSort',
         sortFn: mergeSort,
-        implemented: false
+        implemented: true
     },
 ]
 
