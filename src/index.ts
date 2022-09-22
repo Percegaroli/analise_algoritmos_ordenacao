@@ -46,19 +46,17 @@ const getOrdenationTimeInMiliseconds = (numbers: Array<number>, ordenationFn: Or
     return differenceInMilliseconds(finalTime, initialTime)
 }
 
-const resultsInsertionSort = SAMPLES.map(sampleGroup => ({
-    quantity: sampleGroup[0].length,
-    durations: sampleGroup.map(sample => getOrdenationTimeInMiliseconds(sample, insertionSort))
-}))
-
-const results = ordenationFunctions
+ordenationFunctions
     .filter(({implemented}) => implemented)
     .map(({ sortFn, name, }) => ({
         name,
         results: SAMPLES.map(sampleGroup => ({
             quantity: sampleGroup[0].length,
-            durations: sampleGroup.map(sample => getOrdenationTimeInMiliseconds(sample, sortFn))
+            'durations(ms)': sampleGroup.map(sample => getOrdenationTimeInMiliseconds(sample, sortFn))
         }))
     }))
-
-console.log(results)    
+    .forEach(({ name, results}) => {
+        console.log(`Algoritmo: ${name}`);
+        console.table(results);
+    })
+ 
