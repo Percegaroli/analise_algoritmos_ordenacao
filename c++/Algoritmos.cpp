@@ -102,14 +102,54 @@ void quickSort(int *array, int low, int high){
 	
 }
 
+void heapfy(int *array, int i, int f){
+	if(i >= f)
+		return;
+		
+	int leftChild = 2*i+1;
+	int rightChild = 2*i+2;
+	
+	if(leftChild > f)
+		return;
+		
+	if(leftChild == f){
+		if(array[leftChild] > array[i])
+			swap(array+leftChild, array+i);
+		
+		return;
+	}
+	
+	heapfy(array, leftChild, f);
+	heapfy(array, rightChild, f);
+	
+	if(array[leftChild] >= array[rightChild]){
+		if(array[leftChild] > array[i]){
+			swap(array+leftChild, array+i);
+			heapfy(array, leftChild, f);
+		}
+	}else{
+		if(array[rightChild] > array[i]){
+			swap(array+rightChild, array+i);
+			heapfy(array, rightChild, f);
+		}
+	}
+}
 
+void heapSort(int *array, int length){
+	
+	for(int f = length-1; f > 0; f--){
+		heapfy(array, 0, f);
+		swap(array, array+f);
+	}
+	
+}
 
 int main(){
 	
-	int n = 2;
-	int array[] = {1, 3};
+	int n = 13;
+	int array[] = {15, 56, 45, 9, 3, 54, 9, 237, 593, 13, 86, 36 ,333};
 	print(array, n);
-	quickSort(array, 0, n-1);
+	heapSort(array, n);
 	print(array, n);
 	
 	return 0;
