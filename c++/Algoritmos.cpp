@@ -1,7 +1,16 @@
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <cmath>
 using namespace std;
 
 void print(int *array, int length){
+	for(int i=0; i<length; i++)
+		cout << array[i] << " ";
+	cout << endl;
+}
+
+void print(double *array, int length){
 	for(int i=0; i<length; i++)
 		cout << array[i] << " ";
 	cout << endl;
@@ -45,6 +54,8 @@ void selectionSort(int *array, int length){
 	
 }
 
+
+// merge sort
 void intercala(int *array, int i, int q, int f){
 	int n = f-i+1;
 	int arr[n];
@@ -77,6 +88,12 @@ void mergeSort(int *array, int indexInit, int indexFinal){
 	intercala(array, indexInit, q, indexFinal);
 }
 
+void mergeSortCall(int *array, int n){
+	mergeSort(array, 0, n-1);
+}
+
+
+// quick sort
 int partition(int *array, int low, int high){
 	int pivot = array[high];
 	
@@ -102,6 +119,12 @@ void quickSort(int *array, int low, int high){
 	
 }
 
+void quickSortCall(int *array, int n){
+	quickSort(array, 0, n-1);
+}
+
+
+// heap sort
 void heapfy(int *array, int i, int f){
 	if(i >= f)
 		return;
@@ -144,13 +167,117 @@ void heapSort(int *array, int length){
 	
 }
 
+double clock_to_sec(clock_t initial_clock, clock_t final_clock) {
+	double t = (double) final_clock - (double) initial_clock;
+	return t/CLOCKS_PER_SEC;
+}
+
+double get_time(int *array, int length, void (*sort)(int *,int)) {
+	
+	clock_t initial_clock = clock();
+	sort(array, length);
+	clock_t final_clock = clock();
+	
+	return clock_to_sec(initial_clock, final_clock);
+}
+
+void fill_array(int *array, int length) {
+	for(int i=0; i<length; i++)
+		array[i] = rand();
+}
+
+double get_mean(double *array, int length) {
+	double sum = 0;
+	
+	for(int i=0; i<length; i++)
+		sum += array[i];
+		
+	return sum/length;
+}
+
+double get_sd(double *array, int length) {
+	double mean = get_mean(array, length);
+	
+	double sum = 0;
+	
+	for(int i=0; i<length; i++){
+		double deviation = mean - array[i];
+		sum += deviation * deviation;
+	}
+	
+	return sqrt(sum/(length-1));
+}
+
+double** get_data(int qtdd, int length) {
+
+	double timesInsertionSort[qtdd];
+	double timesSelectionSort[qtdd];
+	double timesMergeSort[qtdd];
+	double timesQuickSort[qtdd];
+	double timesHeapSort[qtdd];
+	
+	int array[length];
+	
+	for(int i=0; i<qtdd; i++) {
+		cout << "i = " << i << endl;
+		fill_array(array, length);
+		timesInsertionSort[i] = get_time(array, length, &insertionSort);
+		timesSelectionSort[i] = get_time(array, length, &selectionSort);
+		timesMergeSort[i] = get_time(array, length, &mergeSortCall);
+		timesQuickSort[i] = get_time(array, length, &quickSortCall);
+		timesHeapSort[i] = get_time(array, length, &heapSort);
+	}
+	
+	double **result = (double **)calloc(5, sizeof(double*));
+	
+	result[0] = (double*)calloc(2, sizeof(double));
+	result[1] = (double*)calloc(2, sizeof(double));
+	result[2] = (double*)calloc(2, sizeof(double));
+	result[3] = (double*)calloc(2, sizeof(double));
+	result[4] = (double*)calloc(2, sizeof(double));
+	
+	result[0][0] = get_mean(timesInsertionSort, qtdd);
+	result[1][0] = get_mean(timesSelectionSort, qtdd);
+	result[2][0] = get_mean(timesMergeSort, qtdd);
+	result[3][0] = get_mean(timesQuickSort, qtdd);
+	result[4][0] = get_mean(timesHeapSort, qtdd);
+	
+	result[0][1] = get_sd(timesInsertionSort, qtdd);
+	result[1][1] = get_sd(timesSelectionSort, qtdd);
+	result[2][1] = get_sd(timesMergeSort, qtdd);
+	result[3][1] = get_sd(timesQuickSort, qtdd);
+	result[4][1] = get_sd(timesHeapSort, qtdd);
+	
+	return result;
+}
+
 int main(){
 	
-	int n = 13;
-	int array[] = {15, 56, 45, 9, 3, 54, 9, 237, 593, 13, 86, 36 ,333};
-	print(array, n);
-	heapSort(array, n);
-	print(array, n);
+	int length, qtdd;
+	
+	cin >> length >> qtdd;
+	
+	double **result = get_data(qtdd, length);
+	
+	cout << "Insertion Sort: " << endl;
+	cout << "Media: " << result[0][0] << endl;
+	cout << "Desvio Padrao: " << result[0][1] << endl << endl;
+	
+	cout << "Selection Sort: " << endl;
+	cout << "Media: " << result[1][0] << endl;
+	cout << "Desvio Padrao: " << result[1][1] << endl << endl;
+	
+	cout << "Merge Sort: " << endl;
+	cout << "Media: " << result[2][0] << endl;
+	cout << "Desvio Padrao: " << result[2][1] << endl << endl;
+	
+	cout << "Quick Sort: " << endl;
+	cout << "Media: " << result[3][0] << endl;
+	cout << "Desvio Padrao: " << result[3][1] << endl << endl;
+	
+	cout << "Heap Sort: " << endl;
+	cout << "Media: " << result[4][0] << endl;
+	cout << "Desvio Padrao: " << result[4][1] << endl << endl;
 	
 	return 0;
 }
