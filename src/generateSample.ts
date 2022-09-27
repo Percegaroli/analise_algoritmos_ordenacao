@@ -12,6 +12,6 @@ const generateMultipleSamples = ({ samplesQuantity, maxValue, quantityPerSample 
         .map(() => generateSamples({samplesQuantity, maxValue}))
 } 
 
-export const SAMPLES = Array(15)
+export const SAMPLES = Array(20)
     .fill(undefined)
     .map((_, index) => generateMultipleSamples({...DEFAULT_SAMPLE_CONFIG, samplesQuantity: Math.pow(2, index + 1 )}))

@@ -18,7 +18,7 @@ const ordenationFunctions = [
     {
         name: 'HeapSort',
         sortFn: heapSort,
-        implemented: false
+        implemented: true
     },
     {
         name: 'QuickSort',
@@ -28,23 +28,19 @@ const ordenationFunctions = [
     {
         name: 'SelectioSort',
         sortFn: selectionSort,
-        implemented: false,
+        implemented: true,
     },
     {
         name: 'MergeSort',
         sortFn: mergeSort,
-        implemented: false
+        implemented: true
     },
 ]
 
 const getOrdenationTimeInMiliseconds = (numbers: Array<number>, ordenationFn: OrdenationFn) => {
     const initialTime = new Date();
-    const orderedArray = ordenationFn([...numbers]);
+    ordenationFn([...numbers]);
     const finalTime = new Date();
-    const correctSort = [...numbers].sort((a, b) => a - b);
-    if (!correctSort.every((number, index) => number === orderedArray[index])){
-        throw new Error('Ordenação incorreta');
-    }
     return differenceInMilliseconds(finalTime, initialTime)
 }
 
