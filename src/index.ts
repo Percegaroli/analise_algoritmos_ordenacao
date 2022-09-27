@@ -1,4 +1,5 @@
 import { differenceInMilliseconds } from "date-fns";
+import { stdev } from 'stats-lite'
 import { SAMPLES } from "./generateSample";
 import { heapSort } from "./sortAlrorithms/heapSort";
 import { insertionSort } from "./sortAlrorithms/insertionSort";
@@ -51,9 +52,9 @@ ordenationFunctions
         results: SAMPLES.map(sampleGroup => {
             const durations = sampleGroup.map(sample => getOrdenationTimeInMiliseconds(sample, sortFn))
             return {
-                quantity: sampleGroup[0].length,
-                mean: calculateArrayMean(durations),
-                'durations(ms)': durations,
+                'tamanho arrays': sampleGroup[0].length,
+                'tempo medio ordenacao (ms)': calculateArrayMean(durations),
+                'desvio padrao': stdev(durations) 
             }}
         )
     }))
